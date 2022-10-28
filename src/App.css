@@ -17,6 +17,7 @@ body{
     padding: 20px;
 }
 .weatherBox{
+    width: 100%;
     display: flex;
 }
 .weatherIcon{

@@ -48,6 +48,11 @@ function App() {
     setLoding(false);
   };
 
+  // 아이콘
+  const getweatherByIcon = async () =>{
+
+  }
+
   useEffect(() => {
     if (city === "") {
       getCurrentLocation();

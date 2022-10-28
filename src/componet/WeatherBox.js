@@ -1,11 +1,10 @@
 import React from "react";
 
 const WeatherBox = ({weather}) => {
-    console.log(weather)
     return (
         <div className="weatherBox">
             <div className="weatherIcon">
-                <img src="img/icon.png"></img>
+                <img src={`http://openweathermap.org/img/wn/${weather?.weather[0].icon}.png`} alt=""/>
             </div>
             <div className="weatherImpo">
                 <h3>{weather?.name}</h3>
