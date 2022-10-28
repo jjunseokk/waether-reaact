@@ -18,6 +18,7 @@ function App() {
   const [city, setcity] = useState("");
   const [loading, setLoding] = useState(false);
   const cities = ["seoul", "paris", "hanoi", "Usa"];
+  const [apiError, setAPIError] = useState("");
   
   // 현재위치.
   const getCurrentLocation = () => {
@@ -30,28 +31,36 @@ function App() {
 
   // 현재 위치 데이터
   const getWeatherByCurrentLoaction = async (lat, lon) => {
-    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=1255e4aac90af2ff4a1905e43962ab4b&units=metric`;
-    setLoding(true);
-    let response = await fetch(url);
-    let data = await response.json();
-    setWeather(data);
-    setLoding(false);
+    try{
+      let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=1255e4aac90af2ff4a1905e43962ab4b&units=metric`;
+      setLoding(true);
+      let response = await fetch(url);
+      let data = await response.json();
+      setWeather(data);
+      setLoding(false);
+    } catch(err){
+      setAPIError(err.message);
+      setLoding(false);
+    }
+
   };
 
   // 나라별 데이터
   const getweatherByCity = async () => {
-    let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=1255e4aac90af2ff4a1905e43962ab4b&units=metric`;
-    setLoding(true);
-    let response = await fetch(url);
-    let data = await response.json();
-    setWeather(data);
-    setLoding(false);
+    try{
+      let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=1255e4aac90af2ff4a1905e43962ab4b&units=metric`;
+      setLoding(true);
+      let response = await fetch(url);
+      let data = await response.json();
+      setWeather(data);
+      setLoding(false);
+    } catch(err) {
+      setAPIError(err.message);
+      setLoding(false);
+    }
+    console.log(apiError);
   };
 
-  // 아이콘
-  const getweatherByIcon = async () =>{
-
-  }
 
   useEffect(() => {
     if (city === "") {
@@ -72,12 +81,16 @@ function App() {
 
   return (
     <div>
-      {loading? <ClipLoader color="#f88c6b" loading={loading} size={150} aria-label="Loading Spinner" data-testid="loader" /> : 
-      <div className="container">
-        <WeatherBox weather={weather} />
-        <WheaterButton cities={cities} setCity={setcity} handleCity={handleCity} selectedCity={city}/>
-      </div>}
-      
+      {loading? (<ClipLoader color="#f88c6b" loading={loading} size={150} aria-label="Loading Spinner" data-testid="loader" /> )
+      : !apiError ? (
+        <div className="container">
+          <WeatherBox weather={weather} />
+          <WheaterButton cities={cities} setCity={setcity} handleCity={handleCity} selectedCity={city}/>
+        </div>
+      ) : (
+        apiError
+      )
+      }
     </div>
 
   );
